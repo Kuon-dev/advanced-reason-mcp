@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["bun-types"],
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+      //"@Player/*": ["src/Modules/Player/*"],
+      //"@Auth/*": ["src/Modules/Auth/*"],
+      //"@ImageGeneration/*": ["src/Modules/ImageGeneration/*"]
+    }
+  }
+}
