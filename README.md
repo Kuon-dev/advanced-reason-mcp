@@ -52,4 +52,4 @@ The tool can be configured through the `claude_desktop_config.json` settings in 
 
 This project is MIT licensed.
 
-You can create your own project and modifying it freely without notifying me under these conditions
+You can create your own project and modifying it freely without notifying me
