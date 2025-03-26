@@ -11,6 +11,7 @@
     "dist"
   ],
   "dependencies": {
+    "@google/genai": "^0.6.1",
     "@modelcontextprotocol/sdk": "^1.0.4",
     "esbuild": "^0.25.0",
     "ollama": "^0.5.12",
