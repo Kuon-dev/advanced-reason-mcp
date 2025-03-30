@@ -30,7 +30,7 @@ export class CombinedSequentialThinkingServer {
   constructor(
     geminiApiKey: string = process.env.GEMINI_API_KEY ?? "",
     openRouterApiKey: string = process.env.OPENROUTER_API_KEY ?? "",
-    deepseekModel: string = "deepseek/deepseek-r1-distill-qwen-32b:free",
+    deepseekModel: string = process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-r1-distill-qwen-32b:free",
   ) {
     this.geminiServer = new GeminiSequentialThinkingServer(geminiApiKey);
     this.deepseekServer = new OpenRouterSequentialThinkingServer(

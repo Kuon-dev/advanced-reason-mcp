@@ -1,4 +1,4 @@
-# DeepSeek Reasoner MCP
+# Advanced Reason MCP
 
 A tool for advanced reasoning and reflection using the Gemini API.
 
@@ -6,6 +6,7 @@ A tool for advanced reasoning and reflection using the Gemini API.
 
 - Node.js 20.17 or higher
 - Gemini API key
+- Open Router API key
 
 ## Installation
 
@@ -42,11 +43,15 @@ The tool can be configured through the `claude_desktop_config.json` settings in 
       "/path/to/your/advanced-reason-mcp/dist/index.js"
     ],
     "env": {
-      "GEMINI_API_KEY": "your-api-key-here"
+      "GEMINI_API_KEY": "your-api-key-here",
+      "OPENROUTER_API_KEY": "your-api-key-here",
+      "OPENROUTER_MODEL": "your-selected-model-here"
     }
   }
 }
 ```
+
+`OPENROUTER_MODEL` env variable is optional. Defaults to `deepseek/deepseek-r1-distill-qwen-32b:free` if left empty.
 
 ## License
 
