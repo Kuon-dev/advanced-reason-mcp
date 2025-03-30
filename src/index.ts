@@ -56,7 +56,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       //   const reflectionArgs = ReflectionSchema.parse(args);
       //   return reflectionServer.processReflection(reflectionArgs);
       //
-      case "sequentialthinking":
+      case "gemini-sequential-thinking":
         const sequentialArgs = SequentialThinkingSchema.parse(args);
         return sequentialServer.processSequentialThinking(sequentialArgs);
 
