@@ -1,8 +1,8 @@
 import { GeminiSequentialThinkingServer } from "./gemini";
 import { z } from "zod";
 import type { Tool } from "@modelcontextprotocol/sdk/types.js";
-import { SequentialThinkingSchema } from "./gemini";
 import { OpenRouterSequentialThinkingServer } from "./openrouter";
+import { SequentialThinkingSchema } from "./utils";
 
 // Define an enum for model selection
 export enum ModelType {
@@ -187,7 +187,7 @@ META:
 
 // Tool definition
 export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
-  name: "gemini-deepseek-sequential",
+  name: "combined-sequential-thinking",
   description: `
     A powerful tool for dynamic and reflective problem-solving through multi-model sequential thinking. This tool combines the abilities of both Gemini and DeepSeek models, allowing you to leverage their unique insights for complex problem analysis. Each thought can build on, question, or revise previous insights as understanding deepens. When to use this tool:
     - Breaking down complex problems into steps 

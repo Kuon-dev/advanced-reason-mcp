@@ -1,26 +1,7 @@
 import OpenAI from "openai";
 import { z } from "zod";
 import type { Tool } from "@modelcontextprotocol/sdk/types.js";
-import { SequentialThinkingSchema } from "./gemini";
-
-// Interface for thought data
-interface ThoughtData {
-  originalQuery: string;
-  currentThinking: string;
-  thoughtNumber: number;
-  totalThoughts: number;
-  nextThoughtNeeded: boolean;
-  thought: string;
-  isRevision?: boolean;
-  revisesThought?: number;
-  branchFromThought?: number;
-  branchId?: string;
-  reasoningMode?: string;
-  suggestedToolUse?: {
-    toolType: string;
-    query: string;
-  };
-}
+import { SequentialThinkingSchema, type ThoughtData } from "./utils";
 
 export class OpenRouterSequentialThinkingServer {
   private openai: OpenAI;
@@ -32,7 +13,7 @@ export class OpenRouterSequentialThinkingServer {
 
   constructor(
     apiKey: string = process.env.OPENROUTER_API_KEY ?? "",
-    model: string = "deepseek/deepseek-r1-distill-qwen-32b:free",
+    model: string = process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-r1-distill-qwen-32b:free",
   ) {
     this.openai = new OpenAI({
       baseURL: "https://openrouter.ai/api/v1",

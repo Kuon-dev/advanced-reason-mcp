@@ -7,11 +7,9 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
-// import { GeminiServer, GEMINI_THINKER_TOOL, GetGeminiThinkerSchema } from "./modules/gemini/index";
 import {
   GeminiSequentialThinkingServer,
   GEMINI_SEQUENTIAL_THINKING_TOOL,
-  SequentialThinkingSchema,
 } from "./modules/sequential/gemini";
 import {
   OpenRouterSequentialThinkingServer,
@@ -22,20 +20,18 @@ import {
   CombinedSequentialThinkingServer,
   GEMINI_DEEPSEEK_SEQUENTIAL_TOOL,
 } from "./modules/sequential/gemini-openrouter";
+import { SequentialThinkingSchema } from "./modules/sequential/utils";
 
 // Initialize servers
-// const deepseekServer = new DeepseekServer();
-// const reflectionServer = new ReflectionServer();
 const geminiServer = new GeminiSequentialThinkingServer();
 const openrouterServer = new OpenRouterSequentialThinkingServer();
 const combinedServer = new CombinedSequentialThinkingServer();
-// const geminiServer = new GeminiServer();
 
 // Create MCP server
 const server = new Server(
   {
     name: "advanced-reflection-reasoning-server",
-    version: "1.0.0",
+    version: "0.1.0",
   },
   {
     capabilities: {
@@ -47,10 +43,8 @@ const server = new Server(
 // Register tools
 server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
-    // DEEPSEEK_THINKER_TOOL,
-    // REFLECTION_TOOL,
-    GEMINI_SEQUENTIAL_THINKING_TOOL,
-    OPENROUTER_SEQUENTIAL_THINKING_TOOL,
+    // GEMINI_SEQUENTIAL_THINKING_TOOL,
+    // OPENROUTER_SEQUENTIAL_THINKING_TOOL,
     GEMINI_DEEPSEEK_SEQUENTIAL_TOOL,
     // GEMINI_THINKER_TOOL
   ],
@@ -62,19 +56,19 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
   try {
     switch (name) {
-      case "combined-sequential-thikning":
+      case "combined-sequential-thinking":
         const combinedArgs = CombinedSequentialThinkingSchema.parse(args);
         return combinedServer.processSequentialThinking(combinedArgs);
 
-      case "openrouter-sequential-thinking":
-        const deepseekSequentialArgs = SequentialThinkingSchema.parse(args);
-        return openrouterServer.processSequentialThinking(
-          deepseekSequentialArgs,
-        );
+      // case "openrouter-sequential-thinking":
+      //   const deepseekSequentialArgs = SequentialThinkingSchema.parse(args);
+      //   return openrouterServer.processSequentialThinking(
+      //     deepseekSequentialArgs,
+      //   );
 
-      case "gemini-sequential-thinking":
-        const geminiSequentialArgs = SequentialThinkingSchema.parse(args);
-        return geminiServer.processSequentialThinking(geminiSequentialArgs);
+      // case "gemini-sequential-thinking":
+      //   const geminiSequentialArgs = SequentialThinkingSchema.parse(args);
+      //   return geminiServer.processSequentialThinking(geminiSequentialArgs);
 
       // case "gemini-thinker":
       //   const geminiArgs = GetGeminiThinkerSchema.parse(args);
