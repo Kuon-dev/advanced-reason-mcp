@@ -128,6 +128,11 @@ export class OpenRouterSequentialThinkingServer {
         }
       }
 
+      // Add user context if provided
+      const userContextSection = args.userContext 
+        ? `\n\n**User-Provided Context:**\n${args.userContext}\n\n`
+        : "";
+
       // Simplified context info
       let intro =
         args.thoughtNumber === 1
@@ -169,13 +174,12 @@ You should consider all previous thoughts and current thinking to advance the un
       const userPrompt = `
 **Sequential Thinking Process - Thought #${args.thoughtNumber} of ${args.totalThoughts}**
 
-**Original Request:** ${this.originalQuery}
-**Current Thinking:** ${args.currentThinking}
+**Original Request:** ${this.originalQuery}${userContextSection}**Current Thinking:** ${args.currentThinking}
 
 ${intro}${previousThoughts}${externalToolInfo}${ending}
 
 **Your Task for This Thought:**
-Provide the next logical step in our reasoning process. Consider the previous thoughts and current thinking to advance our understanding.
+Provide the next logical step in our reasoning process. Consider the user context (if provided), previous thoughts, and current thinking to advance our understanding.
 
 ${constraints}
 
@@ -189,8 +193,8 @@ Your response should be a cohesive thought that moves our analysis forward.
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        temperature: 0.7,
-        // max_tokens: 1000,
+        temperature: 1,
+        max_tokens: 64000,
       });
 
       return (
@@ -262,6 +266,7 @@ Your response should be a cohesive thought that moves our analysis forward.
         branchFromThought: args.branchFromThought,
         branchId: args.branchId,
         reasoningMode: args.reasoningMode,
+        userContext: args.userContext, // Store userContext in thought data
         suggestedToolUse: toolRequest
           ? {
               toolType: toolRequest.toolType,
@@ -343,6 +348,7 @@ export const OPENROUTER_SEQUENTIAL_THINKING_TOOL: Tool = {
     - Multiple reasoning modes (analytical, creative, critical, reflective)
     - Automatically suggests when more thinking might be needed
     - Can detect when to use other tools and integrate their results
+    - Can incorporate user-provided context like code snippets or documents
     
     Usage workflow:
     1. Start with an initial question/problem in the currentThinking parameter
@@ -363,6 +369,7 @@ export const OPENROUTER_SEQUENTIAL_THINKING_TOOL: Tool = {
     - needsMoreThoughts: If reaching end but realizing more thoughts needed
     - reasoningMode: The style of reasoning to apply (analytical, creative, critical, reflective)
     - externalToolResult: Optional results from another tool to incorporate into thinking
+    - userContext: Optional context provided by the user, such as code snippets or relevant documents. Highly encouraged to utilize this field
     `,
   inputSchema: {
     type: "object",
@@ -433,6 +440,10 @@ export const OPENROUTER_SEQUENTIAL_THINKING_TOOL: Tool = {
         required: ["toolType", "query", "result"],
         description:
           "Results from an external tool to incorporate into thinking",
+      },
+      userContext: {
+        type: "string",
+        description: "Additional context provided by the user, such as code snippets, relevant documents, or background information",
       },
     },
     required: [

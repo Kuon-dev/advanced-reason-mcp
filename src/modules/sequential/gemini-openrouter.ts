@@ -30,7 +30,7 @@ export class CombinedSequentialThinkingServer {
   constructor(
     geminiApiKey: string = process.env.GEMINI_API_KEY ?? "",
     openRouterApiKey: string = process.env.OPENROUTER_API_KEY ?? "",
-    deepseekModel: string = process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-r1-distill-qwen-32b:free",
+    deepseekModel: string = process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-r1:free",
   ) {
     this.geminiServer = new GeminiSequentialThinkingServer(geminiApiKey);
     this.deepseekServer = new OpenRouterSequentialThinkingServer(
@@ -206,6 +206,7 @@ export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
     - Multiple reasoning modes (analytical, creative, critical, reflective)
     - Automatically suggests when more thinking might be needed
     - Can detect when to use other tools and integrate their results
+    - Can incorporate user-provided context like code snippets or documents
     
     Usage workflow:
     1. Start with an initial question/problem in the currentThinking parameter
@@ -227,6 +228,7 @@ export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
     - needsMoreThoughts: If reaching end but realizing more thoughts needed
     - reasoningMode: The style of reasoning to apply (analytical, creative, critical, reflective)
     - externalToolResult: Optional results from another tool to incorporate into thinking
+    - userContext: Optional context provided by the user, such as code snippets or relevant documents
     `,
   inputSchema: {
     type: "object",
@@ -303,6 +305,10 @@ export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
         required: ["toolType", "query", "result"],
         description:
           "Results from an external tool to incorporate into thinking",
+      },
+      userContext: {
+        type: "string",
+        description: "Additional context provided by the user, such as code snippets, relevant documents, or background information",
       },
     },
     required: [
