@@ -51,7 +51,12 @@ The tool can be configured through the `claude_desktop_config.json` settings in 
 }
 ```
 
-`OPENROUTER_MODEL` env variable is optional. Defaults to `deepseek/deepseek-r1-distill-qwen-32b:free` if left empty.
+`OPENROUTER_MODEL` env variable is optional. Defaults to `deepseek/deepseek-r1:free` if left empty.
+
+## Limitations
+
+- AI models does not have access to your project context, do be aware
+- If the task is too complex, it is possible for the content to get really long, in which the MCP will timeout and return no response
 
 ## License
 
