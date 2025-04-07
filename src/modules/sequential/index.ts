@@ -1,8 +1,8 @@
-import { GeminiSequentialThinkingServer } from "./gemini";
+// import { GeminiSequentialThinkingServer } from "./gemini";
 import { z } from "zod";
 import type { Tool } from "@modelcontextprotocol/sdk/types.js";
-import { OpenRouterSequentialThinkingServer } from "./openrouter";
 import { SequentialThinkingSchema } from "./utils";
+import { OpenRouterSequentialThinkingServer } from "../providers/openrouter";
 
 // Define an enum for model selection
 export enum ModelType {

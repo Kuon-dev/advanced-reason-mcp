@@ -1,11 +1,7 @@
 import OpenAI from "openai";
 import { z } from "zod";
-import {
-  detectToolRequest,
-  SequentialThinkingSchema,
-  type ThoughtData,
-} from "./utils";
 import { formatCodeContext } from "../code/context";
+import { ThoughtData, SequentialThinkingSchema, detectToolRequest } from "../sequential/utils";
 
 export class OpenRouterSequentialThinkingServer {
   private openai: OpenAI;

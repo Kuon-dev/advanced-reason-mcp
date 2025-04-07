@@ -1,12 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
-import type { Tool } from "@modelcontextprotocol/sdk/types.js";
-import {
-  SequentialThinkingSchema,
-  detectToolRequest,
-  type ThoughtData,
-} from "./utils";
 import { formatCodeContext } from "../code/context";
+import { ThoughtData, SequentialThinkingSchema, detectToolRequest } from "../sequential/utils";
 
 // Interface for thought data
 export class GeminiSequentialThinkingServer {

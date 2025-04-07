@@ -11,7 +11,7 @@ import {
   CombinedSequentialThinkingSchema,
   CombinedSequentialThinkingServer,
   GEMINI_DEEPSEEK_SEQUENTIAL_TOOL,
-} from "./modules/sequential/gemini-openrouter";
+} from "./modules/sequential/index";
 
 // Initialize servers
 const combinedServer = new CombinedSequentialThinkingServer();
@@ -20,7 +20,7 @@ const combinedServer = new CombinedSequentialThinkingServer();
 const server = new Server(
   {
     name: "advanced-reflection-reasoning-server",
-    version: "0.1.0",
+    version: "0.1.1",
   },
   {
     capabilities: {
