@@ -8,7 +8,7 @@ import { SequentialThinkingSchema } from "./utils";
 export enum ModelType {
   GEMINI = "gemini",
   DEEPSEEK = "deepseek",
-  BOTH = "both",
+  ALL = "all",
 }
 
 // Extend the schema to include model selection
@@ -16,7 +16,7 @@ export const CombinedSequentialThinkingSchema = SequentialThinkingSchema.extend(
   {
     modelType: z
       .nativeEnum(ModelType)
-      .default(ModelType.BOTH)
+      .default(ModelType.ALL)
       .describe(
         "Which model to use for generating thoughts: 'gemini', 'deepseek', or 'both'",
       ),
@@ -24,16 +24,21 @@ export const CombinedSequentialThinkingSchema = SequentialThinkingSchema.extend(
 );
 
 export class CombinedSequentialThinkingServer {
-  private geminiServer: GeminiSequentialThinkingServer;
+  // private geminiServer: GeminiSequentialThinkingServer;
+  private geminiServer: OpenRouterSequentialThinkingServer;
   private deepseekServer: OpenRouterSequentialThinkingServer;
 
   constructor(
-    geminiApiKey: string = process.env.GEMINI_API_KEY ?? "",
+    // geminiApiKey: string = process.env.GEMINI_API_KEY ?? "",
     openRouterApiKey: string = process.env.OPENROUTER_API_KEY ?? "",
     deepseekModel: string = process.env.OPENROUTER_MODEL ??
       "deepseek/deepseek-r1:free",
   ) {
-    this.geminiServer = new GeminiSequentialThinkingServer(geminiApiKey);
+    // this.geminiServer = new GeminiSequentialThinkingServer(geminiApiKey);
+    this.geminiServer = new OpenRouterSequentialThinkingServer(
+      openRouterApiKey,
+      "google/gemini-2.5-pro-exp-03-25:free"
+    )
     this.deepseekServer = new OpenRouterSequentialThinkingServer(
       openRouterApiKey,
       deepseekModel,
