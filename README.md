@@ -2,6 +2,8 @@
 
 A tool for advanced reasoning and reflection using the Gemini API.
 
+![Usage](https://pub-41a509da80f94e838106bc730f8b3dbf.r2.dev/ee1c4d760bcc2fbcea3aca6ac2e42c2b88611e83cfe91d8e84eca803d12fcbb5.png)
+
 ## Requirements
 
 - Node.js 20.17 or higher

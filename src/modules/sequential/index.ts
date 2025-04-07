@@ -18,7 +18,7 @@ export const CombinedSequentialThinkingSchema = SequentialThinkingSchema.extend(
       .nativeEnum(ModelType)
       .default(ModelType.ALL)
       .describe(
-        "Which model to use for generating thoughts: 'gemini', 'deepseek', or 'both'",
+        "Which model to use for generating thoughts: 'gemini', 'deepseek', or 'all'",
       ),
   },
 );

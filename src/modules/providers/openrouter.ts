@@ -33,8 +33,8 @@ export class OpenRouterSequentialThinkingServer {
 
   // Add this new private method to the OpenRouterSequentialThinkingServer class
   private async getCompletionWithReasoning(
-    systemPrompt: string,
-    userPrompt: string,
+    systemPrompt: string, 
+    userPrompt: string
   ): Promise<string> {
     try {
       const completion = await this.openai.chat.completions.create({
@@ -47,9 +47,10 @@ export class OpenRouterSequentialThinkingServer {
         temperature: 1,
         max_tokens: 64000,
       });
-
-      let reasoningContent = "";
-
+      
+      let reasoningContent = '';
+      let finalContent = '';
+      
       // Handle streaming response
       for await (const chunk of completion) {
         if (chunk.choices) {
@@ -59,16 +60,24 @@ export class OpenRouterSequentialThinkingServer {
             // @ts-ignore
             reasoningContent += chunk.choices[0].delta.reasoning;
           }
+          
+          // Collect regular content from delta
+          if (chunk.choices[0]?.delta?.content) {
+            finalContent += chunk.choices[0].delta.content;
+          }
         }
       }
-
-      // If we collected reasoning content, return it
-      if (reasoningContent) {
-        return reasoningContent;
+      
+      // Create combined output with both reasoning and final content
+      const combinedOutput = reasoningContent + 
+        (finalContent ? `\n\n=== CONTENT ===\n${finalContent}` : '');
+      
+      if (combinedOutput.trim().length > 0) {
+        return combinedOutput;
       }
-
+      
       // Fallback in case streaming didn't work as expected
-      return "Error: No reasoning content generated";
+      return "Error: No content generated";
     } catch (error) {
       return `Error generating thought: ${error}`;
     }
