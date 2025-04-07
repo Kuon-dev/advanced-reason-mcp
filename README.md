@@ -11,12 +11,14 @@ A tool for advanced reasoning and reflection using the Gemini API.
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone git@github.com:Kuon-dev/advanced-reason-mcp.git
 cd advanced-reason-mcp
 ```
 
 2. Install dependencies
+
 ```bash
 npm install
 ```
@@ -39,9 +41,7 @@ The tool can be configured through the `claude_desktop_config.json` settings in 
 {
   "advanced-reflection-reason": {
     "command": "node",
-    "args": [
-      "/path/to/your/advanced-reason-mcp/dist/index.js"
-    ],
+    "args": ["/path/to/your/advanced-reason-mcp/dist/index.js"],
     "env": {
       "GEMINI_API_KEY": "your-api-key-here",
       "OPENROUTER_API_KEY": "your-api-key-here",

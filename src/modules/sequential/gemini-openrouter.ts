@@ -30,7 +30,8 @@ export class CombinedSequentialThinkingServer {
   constructor(
     geminiApiKey: string = process.env.GEMINI_API_KEY ?? "",
     openRouterApiKey: string = process.env.OPENROUTER_API_KEY ?? "",
-    deepseekModel: string = process.env.OPENROUTER_MODEL ?? "deepseek/deepseek-r1:free",
+    deepseekModel: string = process.env.OPENROUTER_MODEL ??
+      "deepseek/deepseek-r1:free",
   ) {
     this.geminiServer = new GeminiSequentialThinkingServer(geminiApiKey);
     this.deepseekServer = new OpenRouterSequentialThinkingServer(
@@ -189,19 +190,24 @@ META:
 export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
   name: "combined-sequential-thinking",
   description: `
-    A powerful tool for dynamic and reflective problem-solving through multi-model sequential thinking. This tool combines the abilities of both Gemini and DeepSeek models, allowing you to leverage their unique insights for complex problem analysis. Each thought can build on, question, or revise previous insights as understanding deepens. When to use this tool:
-    - Breaking down complex problems into steps 
+    A powerful tool for structured, methodical problem-solving through OpenRouter-powered sequential thinking. This tool generates thoughts following a specific 5-step reasoning structure:
+
+    1. Identify the user's question: Clarify what's being asked and the core problem to solve
+    2. Recall internal knowledge: Access relevant information and context needed for the solution
+    3. Formulate the answer: Develop an initial response based on the identified question and recalled knowledge
+    4. Refine the answer: Improve clarity, accuracy, and relevance of the initial response
+    5. Self-Correction/Refinement: Review for errors or improvements before finalizing
+
+    When to use this tool:
+    - Breaking down complex problems into structured steps 
     - Planning and design with room for revision 
     - Analysis that might need course correction 
     - Problems where the full scope might not be clear initially 
-    - Problems that require a multi-step solution 
+    - Problems that require a methodical solution approach
     - Tasks that need to maintain context over multiple steps 
-    - Comparative analysis where multiple perspectives are valuable
     
     Key features: 
-    - Can use either Gemini, DeepSeek, or both models together for each thought
-    - Models generate thoughts based on previous thinking history
-    - You can adjust total_thoughts up or down as you progress 
+    - OpenRouter models generate each thought using the structured 5-step reasoning process
     - Thoughts can be revised or branched into alternative directions
     - Multiple reasoning modes (analytical, creative, critical, reflective)
     - Automatically suggests when more thinking might be needed
@@ -210,17 +216,24 @@ export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
     
     Usage workflow:
     1. Start with an initial question/problem in the currentThinking parameter
-    2. For subsequent calls, use the generated thought(s) as input for next currentThinking
+    2. For subsequent calls, use the generated thought as the currentThinking parameter
     3. If a tool is suggested, use that tool and pass the results via externalToolResult
     4. Optionally revise previous thoughts or branch into new directions
     5. Continue until a satisfactory conclusion is reached
     
     Parameters explained:
-    - currentThinking: MUST BE DIFFERENT for each thought - use previous output for next input
+    - currentThinking: A structured representation of the evolving thought process. MUST be different than other thoughts, and incorporate previous thinking and explicitly follow the 5-step reasoning structure. For each thought, include:
+        * Original question/problem statement
+        * Current step number (1-n) and its purpose
+        * Summary of previous step's conclusions
+        * Current analysis formatted with clear section headers for each step
+        * Key findings and insights accumulated so far
+        * Any open questions or uncertainties remaining
+        * Transition to the next logical step
+        Format each thought with markdown headers (###) to clearly delineate sections. Ensure each new thought builds upon previous thinking rather than simply repeating it.
     - thoughtNumber: Current number in sequence (can go beyond initial total if needed)
     - totalThoughts: Current estimate of thoughts needed (can be adjusted up/down)
     - nextThoughtNeeded: True if you need more thinking, even if at what seemed like the end
-    - modelType: Which model to use - "gemini", "deepseek", or "both" (default)
     - isRevision: A boolean indicating if this thought revises previous thinking
     - revisesThought: If isRevision is true, which thought number is being reconsidered
     - branchFromThought: If branching, which thought number is the branching point
@@ -228,15 +241,22 @@ export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
     - needsMoreThoughts: If reaching end but realizing more thoughts needed
     - reasoningMode: The style of reasoning to apply (analytical, creative, critical, reflective)
     - externalToolResult: Optional results from another tool to incorporate into thinking
-    - userContext: Optional context provided by the user, such as code snippets or relevant documents
+    - userContext: Optional context provided by the user, such as code snippets or relevant documents. Highly encouraged to utilize this field
     `,
   inputSchema: {
     type: "object",
     properties: {
       currentThinking: {
         type: "string",
-        description:
-          "The evolving thought process - MUST be different for each thought. Use previous generated thought as input for next thought.",
+        description: `A structured representation of the evolving thought process. MUST incorporate previous thinking and explicitly follow the 5-step reasoning structure. For each thought, include:
+        * Original question/problem statement
+        * Current step number (1-n) and its purpose
+        * Summary of previous step's conclusions
+        * Current analysis formatted with clear section headers for each step
+        * Key findings and insights accumulated so far
+        * Any open questions or uncertainties remaining
+        * Transition to the next logical step
+        Format each thought with markdown headers (###) to clearly delineate sections. Ensure each new thought builds upon previous thinking rather than simply repeating it.`,
       },
       thoughtNumber: {
         type: "integer",
@@ -251,12 +271,6 @@ export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
       nextThoughtNeeded: {
         type: "boolean",
         description: "Whether another thought is needed",
-      },
-      modelType: {
-        type: "string",
-        enum: ["gemini", "deepseek", "both"],
-        default: "both",
-        description: "Which model to use for generating thoughts",
       },
       isRevision: {
         type: "boolean",
@@ -308,8 +322,38 @@ export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
       },
       userContext: {
         type: "string",
-        description: "Additional context provided by the user, such as code snippets, relevant documents, or background information",
+        description:
+          "Additional context provided by the user, such as code snippets, relevant documents, or background information",
       },
+      // userContext: {
+      //   type: "codeContext",
+      //   version: "1.0",
+      //   query: "The original user question about code",
+      //   files: [
+      //     {
+      //       path: "path/to/file.ts",
+      //       language: "typescript",
+      //       snippet: "// Relevant code snippet here",
+      //       startLine: 10,
+      //       endLine: 25,
+      //       symbols: [
+      //         {
+      //           name: "functionName",
+      //           type: "function",
+      //           line: 12,
+      //         },
+      //       ],
+      //     },
+      //   ],
+      //   error: {
+      //     message: "Error message if debugging",
+      //     stack: "Stack trace if available",
+      //   },
+      //   projectInfo: {
+      //     structure: "Brief description of relevant project structure",
+      //     dependencies: ["relevant", "dependencies"],
+      //   },
+      // },
     },
     required: [
       "currentThinking",
