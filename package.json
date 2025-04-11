@@ -1,10 +1,10 @@
 {
-  "name": "deepseek-reasoner-mcp",
+  "name": "advanced-reason-mcp",
   "version": "1.0.0",
-  "description": "A MCP server for get deepseek Reasoning",
+  "description": "A MCP server for enabling advanced reasoning for LLM",
   "type": "module",
   "scripts": {
-    "build": "bun run bin/build.ts",
+    "build": "node bin/build.mjs",
     "prepublishOnly": "npm run build"
   },
   "files": [
@@ -15,6 +15,7 @@
     "@modelcontextprotocol/sdk": "^1.0.4",
     "esbuild": "^0.25.0",
     "ollama": "^0.5.12",
+    "openai": "^4.90.0",
     "os": "^0.1.2",
     "path": "^0.12.7",
     "zod": "^3.24.1",
@@ -31,7 +32,7 @@
   "keywords": [
     "mcp",
     "deepseek",
-    "ollama",
+    "gemini",
     "thinking",
     "reasoning",
     "cot"
