@@ -63,7 +63,7 @@ export class CombinedSequentialThinkingServer {
       } else if (modelType === ModelType.DEEPSEEK) {
         // Use only DeepSeek
         return await this.deepseekServer.processSequentialThinking(commonArgs);
-      } else {
+      } else if (modelType === ModelType.ALL) {
         // Use both models and combine results
         const [geminiResult, deepseekResult] = await Promise.all([
           this.geminiServer.processSequentialThinking(commonArgs),
@@ -91,6 +91,7 @@ export class CombinedSequentialThinkingServer {
             isError: true,
           };
         }
+
 
         // Parse results
         let geminiData, deepseekData;
@@ -170,6 +171,8 @@ META:
           };
         }
       }
+
+        else throw new Error('Something went wrong while contacting LLM agent')
     } catch (error) {
       return {
         content: [
@@ -261,7 +264,8 @@ export const GEMINI_DEEPSEEK_SEQUENTIAL_TOOL: Tool = {
         * Key findings and insights accumulated so far
         * Any open questions or uncertainties remaining
         * Transition to the next logical step
-        Format each thought with markdown headers (###) to clearly delineate sections. Ensure each new thought builds upon previous thinking rather than simply repeating it.`,
+        Format each thought with markdown headers (###) to clearly delineate sections. Ensure each new thought builds upon previous thinking rather than simply repeating it.
+        Always ends with at least two questions at the end of the thinking sequence`,
       },
       thoughtNumber: {
         type: "integer",

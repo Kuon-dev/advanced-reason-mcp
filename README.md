@@ -47,9 +47,8 @@ The tool can be configured through the `claude_desktop_config.json` settings in 
     "command": "node",
     "args": ["/path/to/your/advanced-reason-mcp/dist/index.js"],
     "env": {
-      "GEMINI_API_KEY": "your-api-key-here",
       "OPENROUTER_API_KEY": "your-api-key-here",
-      "OPENROUTER_MODEL": "your-selected-model-here"
+      "OPENROUTER_MODEL": "your-selected-model-here",
     }
   }
 }

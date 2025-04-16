@@ -6,7 +6,7 @@ export const SequentialThinkingSchema = z.object({
   currentThinking: z
     .string()
     .describe(
-      "A structured representation of the evolving thought process. MUST be different than other thoughts, and incorporate previous thinking and explicitly follow the 5-step reasoning structure. For each thought, include: * Original question/problem statement * Current step number (1-n) and its purpose * Summary of previous step's conclusions * Current analysis formatted with clear section headers for each step * Key findings and insights accumulated so far * Any open questions or uncertainties remaining * Transition to the next logical step. Format each thought with markdown headers (###) to clearly delineate sections. Ensure each new thought builds upon previous thinking rather than simply repeating it.",
+      "A structured representation of the evolving thought process. MUST be different than other thoughts, and incorporate previous thinking and explicitly follow the 5-step reasoning structure. For each thought, include: * Original question/problem statement * Current step number (1-n) and its purpose * Summary of previous step's conclusions * Current analysis formatted with clear section headers for each step * Key findings and insights accumulated so far * Any open questions or uncertainties remaining * Transition to the next logical step. Format each thought with markdown headers (###) to clearly delineate sections. Ensure each new thought builds upon previous thinking rather than simply repeating it. Always end the current thinking with at least two questions",
     ),
   thoughtNumber: z.number().int().min(1).describe("Current thought number"),
   totalThoughts: z.number().int().min(1).describe("Total thoughts needed"),
@@ -34,7 +34,7 @@ export const SequentialThinkingSchema = z.object({
     .describe("If more thoughts are needed"),
   reasoningMode: z
     .enum(["analytical", "creative", "critical", "reflective"])
-    .default("analytical")
+    .default("reflective")
     .describe("The style of reasoning to apply"),
   externalToolResult: z
     .object({
