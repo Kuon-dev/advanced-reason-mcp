@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/kuon-dev-advanced-reason-mcp-badge.png)](https://mseep.ai/app/kuon-dev-advanced-reason-mcp)
+
 # Advanced Reason MCP
 
 A tool for advanced reasoning and reflection using the Gemini API.
